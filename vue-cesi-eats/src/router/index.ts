@@ -5,7 +5,9 @@ import SearchPage from '../views/SearchPage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import OrdersPage from '../views/OrdersPage.vue'
 import RestaurantPage from '../views/RestaurantPage.vue'
-import DeliverooPage from '../views/DeliverooPage.vue'
+import LoginPage from '../views/LoginPage.vue'
+import RegisterPage from '../views/RegisterPage.vue'
+import { Component } from 'ionicons/dist/types/stencil-public-runtime';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -38,10 +40,15 @@ const routes: Array<RouteRecordRaw> = [
     component: RestaurantPage
   },
   {
-    path: '/deliveroo',
-    name: 'DeliverooPage',
-    component: DeliverooPage
-  }
+    path: '/login',
+    name: 'LoginPage',
+    component: LoginPage
+  },
+  {
+    path: '/register',
+    name: 'RegisterPage',
+    component: RegisterPage
+  },
 ]
 
 const router = createRouter({
