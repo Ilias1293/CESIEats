@@ -16,11 +16,11 @@
         <br><br>
         <ion-item>
           <ion-label position="floating">Email</ion-label>
-          <ion-input v-model="formData.email" type="string"></ion-input>
+          <ion-input v-model="formData.email" type="email"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Mot de passe</ion-label>
-          <ion-input v-model="formData.password" type="string"></ion-input>
+          <ion-input v-model="formData.password" type="password"></ion-input>
         </ion-item>
         <ion-button type="submit" expand="block">Se connecter</ion-button>
       </form>
@@ -30,17 +30,23 @@
 
 <script lang="ts">
 import axios from 'axios';
-export default {
+import { IonLabel,
+IonItem,
+IonInput } from '@ionic/vue';
+
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   data() {
     return {
       formData: {
-        email: '',
-        password: ''
+      email: '',
+      password: ''
       }
     }
   },
   methods: {
-    login() {
+    async login() : Promise<void> {
       axios.post('/login', this.formData)
         .then(response => {
           if (response.status === 200) {
@@ -50,7 +56,7 @@ export default {
         .catch(error => {
           console.log("Erreur d'authentification", error)
         })
-    },
-  },
-};
+    }
+  }
+  });
 </script>
