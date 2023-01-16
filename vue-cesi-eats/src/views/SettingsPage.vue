@@ -2,13 +2,15 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Home</ion-title>
-
+        <ion-title slot="end">Settings</ion-title>
+        <ion-button @click="goBack" fill="clear">
+          <ion-icon :icon="chevronBack" slot="start"></ion-icon>
+        </ion-button>
       </ion-toolbar>
     </ion-header>
     
     <ion-content class="ion-padding">
-      <h1>Home</h1>
+      <h1>Settings</h1>
       <ion-grid>
         <ion-row v-for="restaurant in restaurants" :key="restaurant._id">
           <ion-col v-for="item in restaurant.menu.items" :key="item.name">
@@ -78,7 +80,8 @@ import {
     search,
     home,
     basket,
-    settings
+    settings,
+    chevronBack
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 
@@ -88,14 +91,17 @@ export default defineComponent({
     setup() {
       const router = useRouter();
       const beforeTabChange = () => {
-          // do something before tab change
+        // do something before tab change
       }
       const afterTabChange = () => {
-          // do something after tab change
+        // do something after tab change
       }
       const navigateToSettings = () => {
-          router.push({ path: '/settings' })
-      };
+        router.push({ name: 'settings' });
+      }
+      const goBack = () => {
+        router.go(-1);
+      }
       return {
           search,
           basket,
@@ -105,6 +111,8 @@ export default defineComponent({
           beforeTabChange,
           afterTabChange,
           navigateToSettings,
+          goBack,
+          chevronBack,
           items: []
       }
       
@@ -115,7 +123,7 @@ export default defineComponent({
     methods: {
         async fetchData() {
             try {
-                const {response} = await axios.get('http://localhost:8888/restaurants');
+                const response = await axios.get('http://localhost:8888/restaurants');
                 this.items = response.data;
                 console.log(this.items)
             } catch (error) {
@@ -125,3 +133,13 @@ export default defineComponent({
     }
 });
 </script>
+<!-- 
+<style>
+.settings-button {
+  --background: #00bcd4;
+  --color: white;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+}
+</style> -->

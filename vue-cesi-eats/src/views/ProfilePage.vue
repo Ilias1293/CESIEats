@@ -3,10 +3,18 @@
     <ion-header>
       <ion-toolbar>
         <ion-title>Profile</ion-title>
+        <ion-button fill="clear" @click="navigateToSettings" slot="end">
+          <ion-icon :icon="settings" aria-hidden="true"></ion-icon>
+          <!-- Settings -->
+        </ion-button>
       </ion-toolbar>
     </ion-header>
     
-    <ion-content class="ion-padding">Profile</ion-content>
+    <ion-content class="ion-padding">
+
+      
+
+    </ion-content>
 
     <ion-tabs @ionTabsWillChange="beforeTabChange" @ionTabsDidChange="afterTabChange">
       <!-- https://ionicframework.com/docs/vue/navigation#working-with-tabs -->
@@ -54,25 +62,33 @@
     personCircle, 
     search,
     home,
-    basket
+    basket,
+    settings
   } from 'ionicons/icons';
+  import { useRouter } from 'vue-router';
 
   export default defineComponent({
     components: { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs },
     setup() {
+      const router = useRouter();
       const beforeTabChange = () => {
         // do something before tab change
       }
       const afterTabChange = () => {
         // do something after tab change
       }
+      const navigateToSettings = () => {
+          router.push({ path: '/settings' })
+      }
       return {
         search,
         basket,
         home,
         personCircle,
+        settings,
         beforeTabChange,
-        afterTabChange
+        afterTabChange,
+        navigateToSettings
       }
     }
   });

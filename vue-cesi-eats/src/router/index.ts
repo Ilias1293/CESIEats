@@ -7,6 +7,7 @@ import OrdersPage from '../views/OrdersPage.vue'
 import RestaurantPage from '../views/RestaurantPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
+import SettingsPage from '../views/SettingsPage.vue'
 import { Component } from 'ionicons/dist/types/stencil-public-runtime';
 
 const routes: Array<RouteRecordRaw> = [
@@ -48,6 +49,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/register',
     name: 'RegisterPage',
     component: RegisterPage
+  },
+  {
+    path: '/settings',
+    name: 'SettingsPage',
+    component: SettingsPage
   },
 ]
 

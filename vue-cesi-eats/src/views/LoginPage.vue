@@ -10,20 +10,23 @@
     <ion-content class="ion-padding">
       <form @submit.prevent="login">
         <div class="imgcontainer">
-          <img src="assets/img/login.webp" alt="LoginImg" class="avatar">
+          <img src="assets/img/login.webp" alt="LoginImg" class="avatar" style="width: 10%;">
           <h4>Connectez-vous pour accéder à toutes les fonctionnalités</h4>
+          <div v-if="!isLoginTrue"><h4 style="color:red">Mauvais identifiants.</h4></div>
         </div>
         <br><br>
         <ion-item>
           <ion-label position="floating">Email</ion-label>
-          <ion-input v-model="formData.email" type="email"></ion-input>
+          <ion-input @ionInput="formData.email = $event.target.value;" type="string"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Mot de passe</ion-label>
-          <ion-input v-model="formData.password" type="password"></ion-input>
+          <ion-input @ionInput="formData.password = $event.target.value;" type="password"></ion-input>
         </ion-item>
         <ion-button type="submit" expand="block">Se connecter</ion-button>
       </form>
+      <p>Mon email : {{ formData.email  }}</p>
+      <p>Mon password : {{ formData.password  }}</p>
     </ion-content>
   </ion-page>
 </template>
@@ -32,31 +35,53 @@
 import axios from 'axios';
 import { IonLabel,
 IonItem,
-IonInput } from '@ionic/vue';
+IonInput,
+IonContent,
+IonButton,
+IonTitle,
+IonToolbar,
+IonHeader } from '@ionic/vue';
 
-import { defineComponent } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import Vue from 'vue';
+
 
 export default defineComponent({
-  data() {
-    return {
-      formData: {
-      email: '',
-      password: ''
-      }
-    }
-  },
-  methods: {
-    async login() : Promise<void> {
-      axios.post('/login', this.formData)
-        .then(response => {
-          if (response.status === 200) {
-            console.log('Authentification réussie')
-          }
-        })
-        .catch(error => {
-          console.log("Erreur d'authentification", error)
-        })
-    }
-  }
+  setup() {
+    const formData = ref({
+        email: '',
+        password: ''
+    })
+    const router = useRouter();
+
+    const isLoginTrue = false;
+
+    const login = async() : Promise<void> => {
+          const email = formData.value.email;
+          const password = formData.value.password;
+          console.log(email);
+          console.log(password);
+          axios.post('http://localhost:8888/login', {email, password})
+            .then(response => {
+              if (response.status === 200) {
+                console.log('Authentification réussie');
+                console.log(formData.value.email);
+                console.log(formData.value.password);
+                router.push({ path: '/home', force: true });
+                //isLoginTrue = true;
+              }
+              else {
+                console.log(formData.value.email);
+                console.log(formData.value.password);
+                console.log('Erreur')
+              }
+            })
+            .catch(error => {
+              console.log("Erreur d'authentification", error)
+            })
+        }
+      return { formData, isLoginTrue, login }
+    } 
   });
 </script>
