@@ -12,7 +12,8 @@
         <div class="imgcontainer">
           <img src="assets/img/login.webp" alt="LoginImg" class="avatar" style="width: 10%;">
           <h4>Connectez-vous pour accéder à toutes les fonctionnalités</h4>
-          <div v-if="!isLoginTrue"><h4 style="color:red">Mauvais identifiants.</h4></div>
+          <div v-if="isLoginTrue"><h4 style="color:red">Mauvais identifiants.</h4></div>
+        <div v-if="isLoading"><ion-spinner name="cresent"></ion-spinner></div>
         </div>
         <br><br>
         <ion-item>
@@ -25,8 +26,8 @@
         </ion-item>
         <ion-button type="submit" expand="block">Se connecter</ion-button>
       </form>
-      <p>Mon email : {{ formData.email  }}</p>
-      <p>Mon password : {{ formData.password  }}</p>
+      <!-- <p>Mon email : {{ formData.email  }}</p>
+      <p>Mon password : {{ formData.password  }}</p> -->
     </ion-content>
   </ion-page>
 </template>
@@ -47,7 +48,8 @@ import {
     IonButton,
     IonTitle,
     IonToolbar,
-    IonHeader } from '@ionic/vue';
+    IonSpinner,
+IonHeader } from '@ionic/vue';
 
 import { defineComponent, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -74,7 +76,8 @@ export default defineComponent({
     })
     const router = useRouter();
 
-    const isLoginTrue = false;
+    const isLoginTrue = ref(false);
+    const isLoading = ref(false);
 
     function redirect(page : string) {
       window.location.href = page;
@@ -93,19 +96,24 @@ export default defineComponent({
                 console.log(formData.value.password);
                 //router.push({ path: '/home', force: true });
                 redirect('/home');
-                //isLoginTrue = true;
+                isLoginTrue.value = false;
               }
               else {
                 console.log(formData.value.email);
                 console.log(formData.value.password);
                 console.log('Erreur')
+                isLoginTrue.value = false;
               }
+              isLoading.value = false;
             })
             .catch(error => {
+              isLoginTrue.value = true;
+              isLoading.value = true;
               console.log("Erreur d'authentification", error)
+              
             })
         }
-      return { formData, isLoginTrue, login }
+      return { formData, isLoginTrue, isLoading,login }
     } 
   });
 </script>

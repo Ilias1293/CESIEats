@@ -101,75 +101,76 @@ link
     export default defineComponent({
         components: { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonCard },
         setup() {
-            const router = useRouter();
-            const beforeTabChange = () => {
-                // do something before tab change
-            }
-            const afterTabChange = () => {
-                // do something after tab change
-            }
+          const router = useRouter();
+          const beforeTabChange = () => {
+              // do something before tab change
+          }
+          const afterTabChange = () => {
+              // do something after tab change
+          }
 
-            function goToRestaurant(id : number) {
-              router.push({ path: `/restaurant/${id}` })
-            }
+          function goToRestaurant(id : number) {
+            router.push({ path: `/restaurant/${id}` })
+          }
 
-            interface RestaurantDesc {
-                restaurant_name : string;
-                id_restaurant : number;
-            }
+          interface RestaurantDesc {
+              restaurant_name : string;
+              id_restaurant : number;
+          }
 
-            const listeRestaurants = ref({
-                restaurantsDesc: [] as RestaurantDesc[]
+          const listeRestaurants = ref({
+              restaurantsDesc: [] as RestaurantDesc[]
+          })
+          
+          const fetchRestaurants = async() : Promise<void> => {
+            axios.get('http://localhost:8888/restaurant/name')
+            .then(response => {
+              if (response.status === 200) {
+                console.log('Récupération des restaurants réussis.');
+                const restaurants = response.data;
+                for(const restaurant of restaurants){
+                    const restaurantDesc: RestaurantDesc = {
+                        restaurant_name: restaurant.restaurant_name,
+                        id_restaurant: restaurant.id_restaurant
+                    }
+                
+                listeRestaurants.value.restaurantsDesc.push(restaurantDesc);
+                console.log(restaurantDesc)
+                }
+                
+              }
+              else {
+                console.log('Erreur')
+              }
             })
-            
-            const fetchRestaurants = async() : Promise<void> => {
-              axios.get('http://localhost:8888/restaurant/name')
-              .then(response => {
-                if (response.status === 200) {
-                  console.log('Récupération des restaurants réussis.');
-                  const restaurants = response.data;
-                  for(const restaurant of restaurants){
-                      const restaurantDesc: RestaurantDesc = {
-                          restaurant_name: restaurant.restaurant_name,
-                          id_restaurant: restaurant.id_restaurant
-                      }
-                  
-                  listeRestaurants.value.restaurantsDesc.push(restaurantDesc);
-                  console.log(restaurantDesc)
-                  }
-                  
-                }
-                else {
-                  console.log('Erreur')
-                }
-              })
-              .catch(error => {
-                console.log("Erreur de récuperation des restaurants.", error)
-                //router.push({ path: '/login', force: true });
-              })
-            }
+            .catch(error => {
+              console.log("Erreur de récuperation des restaurants.", error)
+              //router.push({ path: '/login', force: true });
+            })
+          }
 
-            router.addRoute(
-                {
-                  path: '/restaurant/:id',
-                  component: RestaurantPage,
-                  name: 'restaurant'
-                }
-            )
+          router.addRoute(
+              {
+                path: '/restaurant/:id',
+                component: RestaurantPage,
+                name: 'restaurant'
+              }
+          )
 
-            onMounted(() => {
-                fetchRestaurants();
-            });
-        return {search,
-            goToRestaurant,
-            basket,
-            home,
-            personCircle,
-            settings,
-            beforeTabChange,
-            afterTabChange, 
-            listeRestaurants,
-            // fetchRestaurants
+          onMounted(() => {
+              fetchRestaurants();
+          });
+          
+          return {search,
+              goToRestaurant,
+              basket,
+              home,
+              personCircle,
+              settings,
+              beforeTabChange,
+              afterTabChange, 
+              listeRestaurants,
+              // fetchRestaurants
           }
         },
     })

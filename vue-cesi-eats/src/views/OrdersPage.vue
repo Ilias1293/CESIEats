@@ -5,6 +5,14 @@
         <ion-title>Orders</ion-title>
       </ion-toolbar>
     </ion-header>
+
+    <!-- <ion-content>
+      <ion-list>
+        <ion-item v-for="item in basket" :key="item.id">
+          {{ item.name }} - {{ item.price }}
+        </ion-item>
+      </ion-list>
+    </ion-content> -->
     
     <ion-content class="ion-padding">Orders</ion-content>
 
@@ -39,8 +47,10 @@
   </ion-page>
 </template>
 
-<script>
-  import { defineComponent } from 'vue';
+<script lang="ts">
+  import { defineComponent, ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import axios from 'axios';
   import { 
     IonIcon, 
     IonLabel, 
@@ -57,23 +67,66 @@
     basket
   } from 'ionicons/icons';
 
+  interface Basket {
+        id: number;
+        _id: string;
+        name: string;
+        logo: string;
+        menu: {
+            items: [{
+                name: string;
+                numberofitems : number;
+                picture: string;
+                description: string;
+                price: number;
+            }]
+        }
+    }
+
+
   export default defineComponent({
     components: { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs },
     setup() {
+      const router = useRouter();
       const beforeTabChange = () => {
         // do something before tab change
       }
       const afterTabChange = () => {
         // do something after tab change
       }
+
+      const Basket = ref({
+        basket: [] as Basket[]
+      })
+
+    const displayBasket = async() : Promise<void> => {
+    axios.get('http://localhost:8888/basket')
+    .then(response => {
+                    if (response.status === 200) {
+                    console.log('Affichage du panier réussi');
+                    Basket.value.basket = response.data;
+                    console.log(Basket.value.basket);
+                    }
+                    else {
+
+                    console.log('Erreur')
+                    }
+                })
+                .catch(error => {
+                    console.log("Erreur du display Basket", error)
+                })
+            }
+
       return {
         search,
         basket,
         home,
         personCircle,
         beforeTabChange,
+        Basket,
+        displayBasket,
         afterTabChange
       }
-    }
-  });
+    },
+  })
 </script>
