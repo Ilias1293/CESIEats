@@ -88,7 +88,7 @@ export default defineComponent({
           const password = formData.value.password;
           console.log(email);
           console.log(password);
-          axios.post('http://localhost:8888/login/client', {email, password})
+          axios.post('http://localhost:8888/api/V1/login/client', {email, password})
             .then(response => {
               if (response.status === 200) {
                 console.log('Authentification réussie');

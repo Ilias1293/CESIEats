@@ -123,7 +123,7 @@ link
           })
           
           const fetchRestaurants = async() : Promise<void> => {
-            axios.get('http://localhost:8888/restaurant/name')
+            axios.get('http://localhost:8888/api/V1/restaurants/name')
             .then(response => {
               if (response.status === 200) {
                 console.log('Récupération des restaurants réussis.');
@@ -160,7 +160,7 @@ link
           onMounted(() => {
               fetchRestaurants();
           });
-          
+
           return {search,
               goToRestaurant,
               basket,

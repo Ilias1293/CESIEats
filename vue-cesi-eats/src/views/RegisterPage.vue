@@ -77,7 +77,7 @@
           const passwordConfirmation = formData.value.passwordConfirmation;
 
           if(isPasswordsMatch.value) {
-            axios.post('http://localhost:8888/register/client', {name, phone_number, email, password})
+            axios.post('http://localhost:8888/api/V1/register/client', {name, phone_number, email, password})
             .then(response => {
               if (response.status === 200) {
                 console.log('Inscription réussie');

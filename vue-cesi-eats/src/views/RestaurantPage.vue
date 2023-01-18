@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {
     IonContent,
@@ -21,6 +21,7 @@ import {
     IonTitle,
     IonToolbar
   } from '@ionic/vue';
+  import axios from 'axios';
 
 export default defineComponent({
     components: { IonContent, IonHeader, IonPage, IonTitle, IonToolbar },
@@ -31,71 +32,60 @@ export default defineComponent({
 
     setup() {
       const id = '';
+      const name_restaurant = ref('');
 
-      // const fetchRestaurant = async() : Promise<void> => {
-      //   axios.get('http://localhost:8888/restaurant/name')
-      //   .then(response => {
-      //     if (response.status === 200) {
-      //       console.log('Récupération des restaurants réussis.');
-      //       const restaurants = response.data;
-      //       for(const restaurant of restaurants){
-      //           const restaurantDesc: RestaurantDesc = {
-      //               restaurant_name: restaurant.restaurant_name,
-      //               id_restaurant: restaurant.id_restaurant
-      //           }
-            
-      //       listeRestaurants.value.restaurantsDesc.push(restaurantDesc);
-      //       console.log(restaurantDesc)
-      //       }
-            
-      //     }
-      //     else {
-      //       console.log('Erreur')
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log("Erreur de récuperation des restaurants.", error)
-      //     //router.push({ path: '/login', force: true });
-      //   })
-      // },
+      const fetchRestaurant = async() => {
+        console.log('http://localhost:8888/api/V1/restaurant/name/'+id)
+        axios.get('http://localhost:8888/api/V1/restaurant/name/'+id)
+        .then(response => {
+          if (response.status === 200) {
+            console.log('Récupération du nom de restau réussi.');
+            name_restaurant.value = response.data;
+            console.log(name_restaurant)
+            }
 
-      // const fetchMenu = async() : Promise<void> => {
-      //   axios.get('http://localhost:8888/restaurant/name')
-      //   .then(response => {
-      //     if (response.status === 200) {
-      //       console.log('Récupération des restaurants réussis.');
-      //       const restaurants = response.data;
-      //       for(const restaurant of restaurants){
-      //           const restaurantDesc: RestaurantDesc = {
-      //               restaurant_name: restaurant.restaurant_name,
-      //               id_restaurant: restaurant.id_restaurant
-      //           }
-            
-      //       listeRestaurants.value.restaurantsDesc.push(restaurantDesc);
-      //       console.log(restaurantDesc)
-      //       }
-            
-      //     }
-      //     else {
-      //       console.log('Erreur')
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log("Erreur de récuperation des restaurants.", error)
-      //     //router.push({ path: '/login', force: true });
-      //   })
-      // },
+            else {
+              console.log('Erreur')
+            }
+        })
+        .catch(error => {
+          console.log("Erreur de récuperation du nom du restau.", error)
+          //router.push({ path: '/login', force: true });
+        })
+      }
 
-      // onMounted(() => {
+      const fetchMenu = async() => {
+        axios.get('http://localhost:8888/api/V1/restaurant/name')
+        .then(response => {
+          if (response.status === 200) {
+            console.log('Récupération des restaurants réussis.');
+            const restaurants = response.data;
+            console.log(restaurants)
+            }
 
-      //   fetchRestaurant();
-      //   fetchMenu();
+          else {
+            console.log('Erreur')
+          }
+        })
+        .catch(error => {
+          console.log("Erreur de récuperation des restaurants.", error)
+          //router.push({ path: '/login', force: true });
+        })
+      }
+
+      onMounted(() => {
+
+        fetchRestaurant();
+        fetchMenu();
         
-      // });
+      });
 
       return { 
         id,
         onMounted, 
+        fetchRestaurant,
+        fetchMenu,
+        name_restaurant
       }
     }
     
