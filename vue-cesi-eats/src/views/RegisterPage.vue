@@ -52,6 +52,8 @@
   import { useRouter } from 'vue-router';
   import { defineComponent, ref, computed } from 'vue';
 
+  axios.defaults.withCredentials = true;
+
   export default defineComponent({
   setup() {
     const formData = ref({

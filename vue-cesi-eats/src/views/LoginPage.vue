@@ -33,21 +33,40 @@
 
 <script lang="ts">
 import axios from 'axios';
-import { IonLabel,
-IonItem,
-IonInput,
-IonContent,
-IonButton,
-IonTitle,
-IonToolbar,
-IonHeader } from '@ionic/vue';
+import { 
+    IonIcon, 
+    IonLabel, 
+    IonPage,
+    IonRouterOutlet,
+    IonTabBar, 
+    IonTabButton, 
+    IonTabs,
+    IonInput,
+    IonItem,
+    IonContent,
+    IonButton,
+    IonTitle,
+    IonToolbar,
+    IonHeader } from '@ionic/vue';
 
 import { defineComponent, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Vue from 'vue';
 
+axios.defaults.withCredentials = true;
 
 export default defineComponent({
+
+  components: {     
+    IonLabel, 
+    IonPage,
+    IonInput,
+    IonItem,
+    IonContent,
+    IonButton,
+    IonTitle,
+    IonToolbar },
+
   setup() {
     const formData = ref({
         email: '',
@@ -57,18 +76,23 @@ export default defineComponent({
 
     const isLoginTrue = false;
 
+    function redirect(page : string) {
+      window.location.href = page;
+    }
+
     const login = async() : Promise<void> => {
           const email = formData.value.email;
           const password = formData.value.password;
           console.log(email);
           console.log(password);
-          axios.post('http://localhost:8888/login', {email, password})
+          axios.post('http://localhost:8888/login/client', {email, password})
             .then(response => {
               if (response.status === 200) {
                 console.log('Authentification réussie');
                 console.log(formData.value.email);
                 console.log(formData.value.password);
-                router.push({ path: '/home', force: true });
+                //router.push({ path: '/home', force: true });
+                redirect('/home');
                 //isLoginTrue = true;
               }
               else {

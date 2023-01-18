@@ -36,11 +36,6 @@ const routes: Array<RouteRecordRaw> = [
     component: OrdersPage
   },
   {
-    path: '/restaurant',
-    name: 'RestaurantPage',
-    component: RestaurantPage
-  },
-  {
     path: '/login',
     name: 'LoginPage',
     component: LoginPage
@@ -55,6 +50,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'SettingsPage',
     component: SettingsPage
   },
+  {
+    path: '/restaurant/:id',
+    name: 'RestaurantPage',
+    component: RestaurantPage
+  }
 ]
 
 const router = createRouter({

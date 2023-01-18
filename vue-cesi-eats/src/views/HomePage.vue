@@ -6,28 +6,19 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <h1>Home</h1>
-        <!-- <ion-grid>
-          <ion-row v-for="restaurant in Restaurants" :key="restaurant.id">
-            <ion-col v-for="item in restaurant.menu.items" :key="item.name">
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ item.name }}</ion-card-title>
-                  <ion-card-subtitle>{{ item.item_category }}</ion-card-subtitle>
-                </ion-card-header>
+        <!-- <h1>Home</h1> -->
+        
+          <ion-card @click="goToRestaurant(restaurantDesc.id_restaurant)" v-for="restaurantDesc in listeRestaurants.restaurantsDesc" :key="restaurantDesc.id_restaurant">
+              <ion-card-header>
+                <ion-card-title>{{ restaurantDesc.restaurant_name }}</ion-card-title>
+                <!-- <ion-card-subtitle>{{ restaurantDesc.id_restaurant }}</ion-card-subtitle> -->
+              </ion-card-header>
+          </ion-card>
+        
   
-                <ion-card-content>
-                  <img :src="item.picture" alt="item picture">
-                  <p>{{ item.description }}</p>
-                  <p>Price: {{ item.price }}</p>
-                  <ion-button :data-restaurant-id="restaurant.id">Add to cart</ion-button>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-          </ion-row>
-        </ion-grid> -->
-  
-         <ion-tabs @ionTabsWillChange="beforeTabChange" @ionTabsDidChange="afterTabChange">
+      </ion-content>
+      <ion-content>
+        <ion-tabs @ionTabsWillChange="beforeTabChange" @ionTabsDidChange="afterTabChange">
           <!-- https://ionicframework.com/docs/vue/navigation#working-with-tabs -->
           <ion-router-outlet></ion-router-outlet>
           <ion-tab-bar slot="bottom">
@@ -54,7 +45,7 @@
             </ion-tab-button>
   
           </ion-tab-bar>
-        </ion-tabs> -->
+        </ion-tabs>
       </ion-content>
     </ion-page>
   </template>
@@ -64,6 +55,8 @@
     import RestaurantCard from './RestaurantCard.vue';
     import axios from 'axios';
     import { useRouter } from 'vue-router';
+    import RestaurantPage from './RestaurantPage.vue'
+
     import { 
         IonIcon, 
         IonLabel, 
@@ -71,15 +64,19 @@
         IonRouterOutlet,
         IonTabBar, 
         IonTabButton, 
-        IonTabs
+        IonTabs,
+        IonCard
     } from '@ionic/vue';
     import { 
         personCircle, 
         search,
         home,
         basket,
-        settings
+        settings,
+restaurant,
+link
     } from 'ionicons/icons';
+    import Vue from 'vue';
 
     interface Restaurant {
         id: number;
@@ -99,8 +96,10 @@
         }
     }
 
+    
+
     export default defineComponent({
-        components: { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs },
+        components: { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, IonCard },
         setup() {
             const router = useRouter();
             const beforeTabChange = () => {
@@ -110,42 +109,68 @@
                 // do something after tab change
             }
 
-            const Restaurants = ref({
-                restaurants: [] as Restaurant[]
-            })
-
-            const fetchRestaurants = async() : Promise<void> => {
-
-                axios.get('http://localhost:8888/restaurants')
-                .then(response => {
-                    if (response.status === 200) {
-                    console.log('Fetch réussie');
-                    Restaurants.value.restaurants = response.data;
-                    console.log(Restaurants.value.restaurants);
-                    //router.push({ path: '/home', force: true });
-                    //isLoginTrue = true;
-                    }
-                    else {
-
-                    console.log('Erreur')
-                    }
-                })
-                .catch(error => {
-                    console.log("Erreur du fetch", error)
-                })
+            function goToRestaurant(id : number) {
+              router.push({ path: `/restaurant/${id}` })
             }
+
+            interface RestaurantDesc {
+                restaurant_name : string;
+                id_restaurant : number;
+            }
+
+            const listeRestaurants = ref({
+                restaurantsDesc: [] as RestaurantDesc[]
+            })
+            
+            const fetchRestaurants = async() : Promise<void> => {
+              axios.get('http://localhost:8888/restaurant/name')
+              .then(response => {
+                if (response.status === 200) {
+                  console.log('Récupération des restaurants réussis.');
+                  const restaurants = response.data;
+                  for(const restaurant of restaurants){
+                      const restaurantDesc: RestaurantDesc = {
+                          restaurant_name: restaurant.restaurant_name,
+                          id_restaurant: restaurant.id_restaurant
+                      }
+                  
+                  listeRestaurants.value.restaurantsDesc.push(restaurantDesc);
+                  console.log(restaurantDesc)
+                  }
+                  
+                }
+                else {
+                  console.log('Erreur')
+                }
+              })
+              .catch(error => {
+                console.log("Erreur de récuperation des restaurants.", error)
+                //router.push({ path: '/login', force: true });
+              })
+            }
+
+            router.addRoute(
+                {
+                  path: '/restaurant/:id',
+                  component: RestaurantPage,
+                  name: 'restaurant'
+                }
+            )
+
             onMounted(() => {
                 fetchRestaurants();
             });
         return {search,
+            goToRestaurant,
             basket,
             home,
             personCircle,
             settings,
             beforeTabChange,
             afterTabChange, 
-            Restaurants, 
-            fetchRestaurants}
+            listeRestaurants,
+            // fetchRestaurants
+          }
         },
     })
 </script>
