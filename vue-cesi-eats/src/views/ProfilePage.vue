@@ -3,11 +3,11 @@
     <ion-header>
       <ion-toolbar>
         <ion-title>Profile</ion-title>
-        <ion-button v-if="profileData.role=='1'" fill="clear" @click="redirect('/statistics/client')" slot="end">
+        <ion-button v-if="profileData.role=='1'" fill="clear" @click="redirect('http://localhost:8000/chartClient.html?id_client='+profileData.id_person)" slot="end">
           <ion-icon :icon="statsChart" aria-hidden="true"></ion-icon>
           <!-- Statistics Client -->
         </ion-button>
-        <ion-button v-if="profileData.role=='2'" fill="clear" @click="redirect('/statistics/restaurateur')" slot="end">
+        <ion-button v-if="profileData.role=='2'" fill="clear" @click="redirect('http://localhost:8000/chartRestaurant.html?id_restaurant='+profileData.id_person)" slot="end">
           <ion-icon :icon="statsChart" aria-hidden="true"></ion-icon>
           <!-- Statistics Restaurateur -->
         </ion-button>
@@ -148,6 +148,7 @@
     
     //let keys = ref([])
     const profileData = ref({
+          id_person: '',
           surname: '',
           name: '',
           birth: '',
@@ -180,6 +181,7 @@
           
           const tabJson = response.data;
           console.log(tabJson);
+          profileData.value.id_person = tabJson.id_person;
           profileData.value.surname = tabJson.surname;
           profileData.value.name = tabJson.name;
           profileData.value.birth = tabJson.birth;
