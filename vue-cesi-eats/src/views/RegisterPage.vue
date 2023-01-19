@@ -37,6 +37,8 @@
         </ion-item>
         <ion-button type="submit" expand="block">S'enregistrer</ion-button>
       </form>
+
+      <h4 class="imgcontainer">Pour les inscriptions de restaurateurs et livreur, contactez le service client.</h4>
       <!-- <p>Mon email : {{ formData.email  }}</p>
       <p>Mon password : {{ formData.password  }}</p>
       <p>Mon password : {{ formData.passwordConfirmation  }}</p> -->

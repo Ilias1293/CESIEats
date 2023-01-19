@@ -49,7 +49,7 @@
     </ion-content>
     <ion-content v-if="etapeCommande && etapePaiement && !etapeEnvoie" class="ion-padding">
       <ion-progress-bar type="indeterminate"></ion-progress-bar>
-      <h1> Merci de votre commande, commande en cour d'envoi chez le restaurateur. </h1>
+      <h1> Merci de votre commande, commande en cours d'envoi chez le restaurateur. </h1>
     </ion-content>
   </ion-page>
 </template>
@@ -178,7 +178,7 @@ export default defineComponent({
               description: item.item_category,
               price: item.price,
               checked: false,
-              quantity: 0
+              quantity: 1
             }
             leMenu.menu.items.push(itemMenu);
             console.log
@@ -252,7 +252,7 @@ export default defineComponent({
       this.commande.items = this.itemsToSend;
       this.commande.total = this.itemsToSend.reduce((total, item) => total + (item.price * item.qty), 0);
       this.commande.restaurant = this.leMenu.idRestaurant;
-      this.commande.status = "pending";
+      this.commande.status = "En attente d'acceptation restaurateur.";
       axios.post('http://localhost:8888/api/V1/commande', this.commande)
               .then(response => {
                 if (response.status === 201) {

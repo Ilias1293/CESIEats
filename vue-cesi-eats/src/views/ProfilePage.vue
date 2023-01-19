@@ -18,7 +18,7 @@
       </ion-toolbar>
     </ion-header>
     
-    <ion-content v-if="email" class="ion-padding">
+    <ion-content v-if="profileData.name" class="ion-padding">
         <ion-item>
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
@@ -43,10 +43,6 @@
           <ion-input v-model="profileData.phone_number" type="string"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">Email</ion-label>
-          <ion-input v-model="email" disabled></ion-input>
-        </ion-item>
-        <ion-item>
           <ion-label position="floating">Statut (Rôle)</ion-label>
           <ion-input v-if="profileData.role=='1'" value="Client" disabled></ion-input>
           <ion-input v-if="profileData.role=='2'" value="Restaurateur" disabled></ion-input>
@@ -54,10 +50,10 @@
         </ion-item>
         <ion-button @click="updateProfile" expand="block">Mettre à jour</ion-button>
         <ion-button @click="deleteProfile" expand="block">Supprimer</ion-button>
-        <ion-button @click="deleteCookies('token')" expand="block" >Se déconnecter</ion-button>
+        <ion-button @click="deconnect" expand="block" >Se déconnecter</ion-button>
 
     </ion-content>
-    <ion-content v-if="!email" class="ion-padding" >
+    <ion-content v-if="!profileData.name" class="ion-padding" >
       <img alt="genera" v-bind:src="require('@/img/pasDeCompte.jpg')" style="display: flex; justify-content: center;"/>
       <ion-button @click="redirect('/login')" expand="block" >Se connecter</ion-button>
     </ion-content>
@@ -204,6 +200,27 @@
       })
     }
 
+    const deconnect = async() : Promise<void> => {
+          
+
+          axios.post('http://localhost:8888/api/V1/logout')
+          .then(response => {
+            if (response.status === 200) {
+              
+              console.log("Déconnexion avec succès.");
+              redirect("/home");
+              
+            }
+            else {
+              console.log('Erreur')
+            }
+          })
+          .catch(error => {
+            console.log("Déconnexion echoué.", error)
+            
+          })
+        }
+
     const getSponsorshipCode = async() : Promise<void> => {
           
 
@@ -285,7 +302,8 @@
       deleteProfile,
       beforeTabChange,
       afterTabChange,
-      redirect }
+      redirect,
+      deconnect }
     }
 
   });
