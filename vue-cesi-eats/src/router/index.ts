@@ -7,7 +7,9 @@ import OrdersPage from '../views/OrdersPage.vue'
 import RestaurantPage from '../views/RestaurantPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
-import SettingsPage from '../views/SettingsPage.vue'
+import StatisticsClientPage from '../views/StatisticsClientPage.vue'
+import StatisticsRestaurateurPage from '../views/StatisticsRestaurateurPage.vue'
+import StatisticsLivreurPage from '../views/StatisticsLivreurPage.vue'
 import { Component } from 'ionicons/dist/types/stencil-public-runtime';
 
 const routes: Array<RouteRecordRaw> = [
@@ -46,9 +48,19 @@ const routes: Array<RouteRecordRaw> = [
     component: RegisterPage
   },
   {
-    path: '/settings',
-    name: 'SettingsPage',
-    component: SettingsPage
+    path: '/statistics/client',
+    name: 'StatisticsClientPage',
+    component: StatisticsClientPage
+  },
+  {
+    path: '/statistics/restaurateur',
+    name: 'StatisticsRestaurateurPage',
+    component: StatisticsRestaurateurPage
+  },
+  {
+    path: '/statistics/livreur',
+    name: 'StatisticsLivreurPage',
+    component: StatisticsLivreurPage
   },
   {
     path: '/restaurant/:id',

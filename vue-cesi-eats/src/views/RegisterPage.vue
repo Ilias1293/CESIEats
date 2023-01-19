@@ -35,7 +35,7 @@
           <ion-label position="floating">Confirmer Mot de passe</ion-label>
           <ion-input @ionInput="formData.passwordConfirmation = $event.target.value;" type="password"></ion-input>
         </ion-item>
-        <ion-button type="submit" expand="block">S'inscrire</ion-button>
+        <ion-button type="submit" expand="block">S'enregistrer</ion-button>
       </form>
       <!-- <p>Mon email : {{ formData.email  }}</p>
       <p>Mon password : {{ formData.password  }}</p>

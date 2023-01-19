@@ -25,6 +25,7 @@
           <ion-input @ionInput="formData.password = $event.target.value;" type="password"></ion-input>
         </ion-item>
         <ion-button type="submit" expand="block">Se connecter</ion-button>
+        <ion-button @click="redirectRegister" expand="block">S'enregistrer</ion-button>
       </form>
       <!-- <p>Mon email : {{ formData.email  }}</p>
       <p>Mon password : {{ formData.password  }}</p> -->
@@ -82,6 +83,10 @@ export default defineComponent({
     function redirect(page : string) {
       window.location.href = page;
     }
+    function redirectRegister() {
+      window.location.href = '/register';
+    }
+
 
     const login = async() : Promise<void> => {
           const email = formData.value.email;
@@ -113,7 +118,7 @@ export default defineComponent({
               
             })
         }
-      return { formData, isLoginTrue, isLoading,login }
+      return { formData, isLoginTrue, isLoading,login, redirectRegister }
     } 
   });
 </script>
